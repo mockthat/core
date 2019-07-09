@@ -1,6 +1,6 @@
 {
   "name": "@mockthat/core",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "./dist/main.js",
   "repository": {
@@ -12,6 +12,7 @@
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register ./index.ts",
     "start:watch": "nodemon",
+    "postinstall": "npm run build",
     "build": "tsc"
   },
   "dependencies": {
