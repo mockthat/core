@@ -1,0 +1,27 @@
+# compiled output
+/dist
+/tmp
+**/tmp
+/out-tsc
+__diff__
+
+# dependencies
+/node_modules
+**/node_modules
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+.angulardoc.json
+/storybook-static
+
+# backstop tests
+/backstop_data/bitmaps_test/
+/backstop_data/html_report/
+/backstop_data/backstop-config.json

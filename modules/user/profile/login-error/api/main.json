@@ -1,0 +1,14 @@
+{
+  "services": [
+    {
+      "api": "/login",
+      "method": "GET",
+      "path": "./response/success.json",
+      "code": 500,
+      "header": {
+        "error": "Tea pot"
+      }
+    }
+  ],
+  "port": 5000
+}

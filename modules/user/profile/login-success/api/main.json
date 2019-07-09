@@ -1,0 +1,12 @@
+{
+  "services": [
+    {
+      "api": "/login",
+      "method": "GET",
+      "path": "./response/success.json",
+      "code": 200,
+      "header": {  }
+    }
+  ],
+  "port": 5000
+}

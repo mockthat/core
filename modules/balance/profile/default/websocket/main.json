@@ -1,0 +1,16 @@
+{
+  "trigger": "LOOPING",
+  "messages": [{
+    "event": "dummy",
+    "path": "./messages/1.json",
+    "delay": 300
+  }, {
+    "event": "dummy",
+    "path": "./messages/2.json",
+    "delay": 300
+  }, {
+    "event": "dummy",
+    "path": "./messages/3.json",
+    "delay": 300
+  }]
+}

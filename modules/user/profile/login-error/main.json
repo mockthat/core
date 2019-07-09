@@ -1,0 +1,10 @@
+{
+  "name": "Login Error",
+  "api": {
+    "active": true,
+    "config": "./api/main.json"
+  },
+  "websocket": {
+    "active": false
+  }
+}
