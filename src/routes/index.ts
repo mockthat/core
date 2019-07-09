@@ -18,7 +18,7 @@ export const setRoutes = (app: any, server: http.Server, path: string) => {
   const wss = io(server);
 
   app.get('/', ({}, res) => {
-    res.send('Hello World 2');
+    res.send('Soon will have some documentation here');
   });
 
   app.get('/modules', ({}, res) => {

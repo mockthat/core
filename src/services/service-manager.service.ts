@@ -32,26 +32,33 @@ export class ServiceManagerService {
     if (this.instances[moduleId] && this.instances[moduleId].running) {
       console.log('stopping already started server');
       this.stop(moduleId);
+      delete this.instances[moduleId];
     }
 
     const config = this.load(moduleId, profileId);
 
-    // TODO: Move to higher manager
-    config.server = new HttpManagerService(
-      config.main.api,
-      this.pathService.getServicePath(moduleId, profileId, 'api'),
-    );
+    if (config.main.api) {
+      config.server = new HttpManagerService(
+        config.main.api,
+        this.pathService.getServicePath(moduleId, profileId, 'api'),
+      );
+    }
 
-    config.socket = new WebsocketManagerService(
-      config.main.websocket,
-      this.pathService.getServicePath(moduleId, profileId, 'websocket'),
-      socketServer,
-    );
+    if (config.main.websocket) {
+      config.socket = new WebsocketManagerService(
+        config.main.websocket,
+        this.pathService.getServicePath(moduleId, profileId, 'websocket'),
+        socketServer,
+      );
+    }
 
     config.running = true;
     this.instances[moduleId] = config;
 
-    return this.instances;
+    return {
+      main: config.main,
+      running: config.running,
+    };
   }
 
   stop(moduleId: string) {
