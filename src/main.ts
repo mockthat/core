@@ -14,4 +14,6 @@ export const initialize = (path: string, port: number) => {
     console.log(`Mock that! is currently runnig at http://localhost:${PORT}/`);
     console.log(`Serving Files: ${resolve(`${path}`)}`);
   });
+
+  return app;
 }
