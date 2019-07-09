@@ -1,16 +1,16 @@
 import * as http from 'http';
 import * as io from 'socket.io';
+import * as express from 'express';
 
 import { PathService } from '../services/path.service';
 import { ServiceManagerService } from '../services/service-manager.service';
 
-
-export const setRoutes = (app: any, server: http.Server, path: string) => {
+export const setRoutes = (app: express.Express, server: http.Server, path: string) => {
   const pathService = new PathService({ root: path });
   const serviceManager = new ServiceManagerService(pathService);
   const wss = io(server);
 
-  app.get('/', ({}, res) => {
+  app.get('/available-mocks', ({}, res) => {
     const mocks = pathService.getMocks().map(item => ({
       ...item,
       profiles: pathService.getProfiles(item.id),
