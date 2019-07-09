@@ -10,16 +10,16 @@ export class ServiceManagerService {
 
   constructor(private pathService: PathService) {}
 
-  private load(moduleId: string, profileId: string): IHttpInstance {
-    const profile = this.pathService.getProfile(moduleId, profileId);
+  private load(categoryId: string, profileId: string): IHttpInstance {
+    const profile = this.pathService.getProfile(categoryId, profileId);
     let websocket: IWebsocketMain;
     let api: IApiMain;
     if (profile.websocket.active) {
-      websocket = this.pathService.getService<IWebsocketMain>(moduleId, profileId, 'websocket');
+      websocket = this.pathService.getService<IWebsocketMain>(categoryId, profileId, 'websocket');
     }
 
     if (profile.api.active) {
-      api = this.pathService.getService<IApiMain>(moduleId, profileId, 'api');
+      api = this.pathService.getService<IApiMain>(categoryId, profileId, 'api');
     }
 
     return {
@@ -28,32 +28,32 @@ export class ServiceManagerService {
     }
   }
 
-  start(moduleId: string, profileId: string, socketServer: io.Server) {
-    if (this.instances[moduleId] && this.instances[moduleId].running) {
+  start(categoryId: string, profileId: string, socketServer: io.Server) {
+    if (this.instances[categoryId] && this.instances[categoryId].running) {
       console.log('stopping already started server');
-      this.stop(moduleId);
-      delete this.instances[moduleId];
+      this.stop(categoryId);
+      delete this.instances[categoryId];
     }
 
-    const config = this.load(moduleId, profileId);
+    const config = this.load(categoryId, profileId);
 
     if (config.main.api) {
       config.server = new HttpManagerService(
         config.main.api,
-        this.pathService.getServicePath(moduleId, profileId, 'api'),
+        this.pathService.getServicePath(categoryId, profileId, 'api'),
       );
     }
 
     if (config.main.websocket) {
       config.socket = new WebsocketManagerService(
         config.main.websocket,
-        this.pathService.getServicePath(moduleId, profileId, 'websocket'),
+        this.pathService.getServicePath(categoryId, profileId, 'websocket'),
         socketServer,
       );
     }
 
     config.running = true;
-    this.instances[moduleId] = config;
+    this.instances[categoryId] = config;
 
     return {
       main: config.main,
@@ -61,13 +61,13 @@ export class ServiceManagerService {
     };
   }
 
-  stop(moduleId: string) {
-    const config = this.instances[moduleId];
+  stop(categoryId: string) {
+    const config = this.instances[categoryId];
     if (
       !config ||
       !config.running ||
       (!config.server && !config.socket)) {
-      throw new Error(`Server is not started for ${moduleId}`);
+      throw new Error(`Server is not started for ${categoryId}`);
     }
 
     if (config.server) {

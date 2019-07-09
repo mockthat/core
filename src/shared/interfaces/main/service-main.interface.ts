@@ -23,6 +23,7 @@ export interface IApiMain {
 
 export interface IWebsocketMain {
   messages: IMessage[],
-  trigger: 'AFTER_CONNECTION' | 'LOOPING';
+  trigger: 'ON_CONNECTION' | 'IMMEDIATELY';
+  repeat: boolean;
 }
 

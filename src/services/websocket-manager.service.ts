@@ -11,14 +11,20 @@ export class WebsocketManagerService {
   }
 
   init(io: io.Server) {
-    this.startLooping(0, io);
+    switch(this.config.trigger) {
+      case 'IMMEDIATELY':
+        this.startLooping(0, io);
+        break;
+      case 'ON_CONNECTION':
+        io.on('connection', () => this.startLooping(0, io));
+        break;
+    }
   }
 
   startLooping(messageIndex: number, io: io.Server) {
     const message = this.config.messages[messageIndex];
-    const type = this.config.trigger;
 
-    if (!message && type === 'LOOPING' && this.active) {
+    if (!message && this.config.repeat && this.active) {
       this.startLooping(0, io);
     }
 

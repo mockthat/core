@@ -1,5 +1,6 @@
 {
-  "trigger": "LOOPING",
+  "trigger": "IMMEDIATELY",
+  "repeat": "LOOPING",
   "messages": [{
     "event": "dummy",
     "path": "./messages/1.json",

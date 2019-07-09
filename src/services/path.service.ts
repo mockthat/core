@@ -6,23 +6,23 @@ import { IProfileMain } from '../shared/interfaces/main/profile-main.interface';
 export class PathService {
   constructor(private config: IPathConfig) { }
 
-  getModules() {
+  getMocks() {
     return this.readMainJSON(this.config.root);
   }
 
-  getProfiles(moduleId: string) {
-    const modulePath = path.resolve(`${this.config.root}/${moduleId}/profile`);
+  getProfiles(categoryId: string) {
+    const modulePath = path.resolve(`${this.config.root}/${categoryId}/profile`);
 
     if (!fs.existsSync(modulePath)) {
       throw new Error(`${modulePath} doesn't exist!`);
     }
 
 
-    return this.readMainJSON(modulePath, `${this.config.root}/${moduleId}/profile`);
+    return this.readMainJSON(modulePath, `${this.config.root}/${categoryId}/profile`);
   }
 
-  getProfile(moduleId: string, profileId: string): IProfileMain {
-    const profilePath = path.resolve(`${this.config.root}/${moduleId}/profile/${profileId}/main.json`);
+  getProfile(categoryId: string, profileId: string): IProfileMain {
+    const profilePath = path.resolve(`${this.config.root}/${categoryId}/profile/${profileId}/main.json`);
 
     if (!fs.existsSync(profilePath)) {
       throw new Error(`${profilePath} doesn't exist!`);
@@ -31,8 +31,8 @@ export class PathService {
     return { ...JSON.parse(fs.readFileSync(profilePath, 'utf-8')), id: profileId };
   }
 
-  getService<T>(moduleId: string, profileId: string, servicePath: 'api' | 'websocket'): T {
-    const profilePath = path.resolve(`${this.getServicePath(moduleId, profileId, servicePath)}/main.json`);
+  getService<T>(categoryId: string, profileId: string, servicePath: 'api' | 'websocket'): T {
+    const profilePath = path.resolve(`${this.getServicePath(categoryId, profileId, servicePath)}/main.json`);
 
     if (!fs.existsSync(profilePath)) {
       throw new Error(`${profilePath} doesn't exist!`);
@@ -41,8 +41,8 @@ export class PathService {
     return JSON.parse(fs.readFileSync(profilePath, 'utf-8'));
   }
 
-  getServicePath(moduleId: string, profileId: string, servicePath: 'api' | 'websocket') {
-    return path.resolve(`${this.config.root}/${moduleId}/profile/${profileId}/${servicePath}/`);
+  getServicePath(categoryId: string, profileId: string, servicePath: 'api' | 'websocket') {
+    return path.resolve(`${this.config.root}/${categoryId}/profile/${profileId}/${servicePath}/`);
   }
 
   readMainJSON(initialPath: string, mainPathPrefix: string = initialPath): any {

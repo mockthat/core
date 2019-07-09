@@ -6,10 +6,9 @@ import { ServiceManagerService } from '../services/service-manager.service';
 
 
 export const setRoutes = (app: any, server: http.Server, path: string) => {
-  const PATH_MODULES = path;
 
   const pathService = new PathService({
-    root: PATH_MODULES,
+    root: path,
   });
 
   const httpManager = new ServiceManagerService(pathService);
@@ -21,25 +20,25 @@ export const setRoutes = (app: any, server: http.Server, path: string) => {
     res.send('Soon will have some documentation here');
   });
 
-  app.get('/modules', ({}, res) => {
-    res.json(pathService.getModules());
+  app.get('/mocks', ({}, res) => {
+    res.json(pathService.getMocks());
   });
 
-  app.get('/modules/:moduleId', (req, res) => {
-    res.json(pathService.getProfiles(req.params.moduleId));
+  app.get('/mocks/:categoryId', (req, res) => {
+    res.json(pathService.getProfiles(req.params.categoryId));
   });
 
-  app.get('/modules/:moduleId/:profileId', (req, res) => {
+  app.get('/mocks/:categoryId/:profileId', (req, res) => {
     res.json(req.params);
   });
 
-  app.get('/modules/:moduleId/:profileId/start', (req, res) => {
-    const instances = httpManager.start(req.params.moduleId, req.params.profileId, wss);
+  app.get('/mocks/:categoryId/:profileId/start', (req, res) => {
+    const instances = httpManager.start(req.params.categoryId, req.params.profileId, wss);
     res.json(instances);
   });
 
-  app.get('/modules/:moduleId/:profileId/stop', (req, res) => {
-    httpManager.stop(req.params.moduleId);
+  app.get('/mocks/:categoryId/:profileId/stop', (req, res) => {
+    httpManager.stop(req.params.categoryId);
     res.json({
       param: req.params,
       action: 'stop',
