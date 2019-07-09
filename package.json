@@ -1,6 +1,6 @@
 {
   "name": "@mockthat/core",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "./dist/main.js",
   "repository": {
@@ -12,8 +12,9 @@
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register ./index.ts",
     "start:watch": "nodemon",
-    "postinstall": "npm run build",
-    "build": "./node_modules/.bin/tsc"
+    "postinstall": "npm run tsc",
+    "tsc": "tsc",
+    "build": "npm run build"
   },
   "dependencies": {
     "express": "^4.17.1",
