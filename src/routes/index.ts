@@ -6,41 +6,39 @@ import { ServiceManagerService } from '../services/service-manager.service';
 
 
 export const setRoutes = (app: any, server: http.Server, path: string) => {
-
-  const pathService = new PathService({
-    root: path,
-  });
-
-  const httpManager = new ServiceManagerService(pathService);
-
-  //initialize the WebSocket server instance
+  const pathService = new PathService({ root: path });
+  const serviceManager = new ServiceManagerService(pathService);
   const wss = io(server);
 
   app.get('/', ({}, res) => {
-    res.send('Soon will have some documentation here');
+    const mocks = pathService.getMocks().map(item => ({
+      ...item,
+      profiles: pathService.getProfiles(item.id),
+    }));
+
+    res.json(mocks);
   });
 
-  app.get('/mocks', ({}, res) => {
-    res.json(pathService.getMocks());
-  });
-
-  app.get('/mocks/:categoryId', (req, res) => {
-    res.json(pathService.getProfiles(req.params.categoryId));
-  });
-
-  app.get('/mocks/:categoryId/:profileId', (req, res) => {
-    res.json(req.params);
-  });
-
-  app.get('/mocks/:categoryId/:profileId/start', (req, res) => {
-    const instances = httpManager.start(req.params.categoryId, req.params.profileId, wss);
+  app.get('/status', ({}, res) => {
+    let instances = [];
+    Object.keys(serviceManager.instances).forEach(key => {
+      const instance = serviceManager.instances[key];
+      instances.push({
+        main: instance.main,
+        running: instance.running,
+      })
+    });
     res.json(instances);
   });
 
-  app.get('/mocks/:categoryId/:profileId/stop', (req, res) => {
-    httpManager.stop(req.params.categoryId);
+  app.get('/mock/:categoryId/:profileId/start', (req, res) => {
+    const instances = serviceManager.start(req.params.categoryId, req.params.profileId, wss);
+    res.json(instances);
+  });
+
+  app.get('/mock/:categoryId/:profileId/stop', (req, res) => {
+    serviceManager.stop(req.params.categoryId);
     res.json({
-      param: req.params,
       action: 'stop',
     });
   });

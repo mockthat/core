@@ -11,6 +11,7 @@ export class ServiceManagerService {
   constructor(private pathService: PathService) {}
 
   private load(categoryId: string, profileId: string): IHttpInstance {
+    const category = this.pathService.getCategory(categoryId);
     const profile = this.pathService.getProfile(categoryId, profileId);
     let websocket: IWebsocketMain;
     let api: IApiMain;
@@ -24,7 +25,7 @@ export class ServiceManagerService {
 
     return {
       running: false,
-      main: { api, profile, websocket }
+      main: { api, profile, websocket, category }
     }
   }
 

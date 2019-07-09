@@ -2,12 +2,23 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { IPathConfig } from '../shared/interfaces/path.interface';
 import { IProfileMain } from '../shared/interfaces/main/profile-main.interface';
+import { ICategoryMain } from '../shared/interfaces/main/category-main.interface';
 
 export class PathService {
   constructor(private config: IPathConfig) { }
 
-  getMocks() {
+  getMocks(): ICategoryMain[] {
     return this.readMainJSON(this.config.root);
+  }
+
+  getCategory(categoryId: string): IProfileMain {
+    const categoryPath = path.resolve(`${this.config.root}/${categoryId}/main.json`);
+
+    if (!fs.existsSync(categoryPath)) {
+      throw new Error(`${categoryPath} doesn't exist!`);
+    }
+
+    return { ...JSON.parse(fs.readFileSync(categoryPath, 'utf-8')), id: categoryId };
   }
 
   getProfiles(categoryId: string) {
