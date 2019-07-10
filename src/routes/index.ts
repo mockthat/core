@@ -10,6 +10,12 @@ export const setRoutes = (app: express.Express, server: http.Server, path: strin
   const serviceManager = new ServiceManagerService(pathService);
   const wss = io(server);
 
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+  });
+
   app.get('/available-mocks', ({}, res) => {
     const mocks = pathService.getMocks().map(item => ({
       ...item,

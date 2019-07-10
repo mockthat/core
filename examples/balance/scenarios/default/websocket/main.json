@@ -1,6 +1,6 @@
 {
-  "trigger": "IMMEDIATELY",
-  "repeat": "LOOPING",
+  "trigger": "ON_CONNECTION",
+  "repeat": true,
   "messages": [{
     "event": "dummy",
     "path": "./messages/1.json",

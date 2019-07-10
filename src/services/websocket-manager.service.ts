@@ -8,6 +8,11 @@ export class WebsocketManagerService {
 
   constructor(private config: IWebsocketMain, private path: string, io: io.Server) {
     this.init(io);
+
+    io.on('disconnection', (connection) => {
+      console.log('\tClient connected!');
+      this.startLooping(0, connection);
+    });
   }
 
   init(io: io.Server) {
@@ -16,12 +21,20 @@ export class WebsocketManagerService {
         this.startLooping(0, io);
         break;
       case 'ON_CONNECTION':
-        io.on('connection', () => this.startLooping(0, io));
+        io.on('connection', socket => {
+          console.log('\tClient connected!');
+          this.startLooping(0, socket);
+
+          socket.on('disconnect', () => {
+            console.log('\tClient disconnected!');
+            this.stop();
+         });
+        });
         break;
     }
   }
 
-  startLooping(messageIndex: number, io: io.Server) {
+  startLooping(messageIndex: number, io: io.Socket | io.Server) {
     const message = this.config.messages[messageIndex];
 
     if (!message && this.config.repeat && this.active) {
@@ -33,11 +46,18 @@ export class WebsocketManagerService {
     }
 
     const content = fs.readFileSync(path.resolve(`${this.path}/${message.path}`), 'utf-8');
-    io.emit(message.event, JSON.parse(content));
 
     const nextIndex = messageIndex + 1;
 
-    setTimeout(() => this.startLooping(nextIndex, io), message.delay || 0);
+    setTimeout(() => {
+      if (!this.active) {
+        return;
+      }
+
+      this.startLooping(nextIndex, io);
+      console.log(`Emiting ${message.event}`);
+      io.emit(message.event, JSON.parse(content));
+    }, message.delay || 0);
   }
 
   stop() {

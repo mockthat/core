@@ -26,6 +26,12 @@ export class HttpManagerService {
         console.log(`All routes started on port ${config.port}`);
       });
 
+      this.express.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        next();
+      });
+
       this.express.get('/', ({} , res) => res.json({ running: true }));
 
 
