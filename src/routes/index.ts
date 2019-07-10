@@ -13,7 +13,7 @@ export const setRoutes = (app: express.Express, server: http.Server, path: strin
   app.get('/available-mocks', ({}, res) => {
     const mocks = pathService.getMocks().map(item => ({
       ...item,
-      profiles: pathService.getProfiles(item.id),
+      scenarios: pathService.getScenarios(item.id),
     }));
 
     res.json(mocks);
@@ -31,12 +31,12 @@ export const setRoutes = (app: express.Express, server: http.Server, path: strin
     res.json(instances);
   });
 
-  app.get('/mock/:categoryId/:profileId/start', (req, res) => {
-    const instances = serviceManager.start(req.params.categoryId, req.params.profileId, wss);
+  app.get('/mock/:categoryId/:scenarioId/start', (req, res) => {
+    const instances = serviceManager.start(req.params.categoryId, req.params.scenarioId, wss);
     res.json(instances);
   });
 
-  app.get('/mock/:categoryId/:profileId/stop', (req, res) => {
+  app.get('/mock/:categoryId/:scenarioId/stop', (req, res) => {
     serviceManager.stop(req.params.categoryId);
     res.json({
       action: 'stop',

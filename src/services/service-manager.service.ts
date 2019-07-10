@@ -10,45 +10,45 @@ export class ServiceManagerService {
 
   constructor(private pathService: PathService) {}
 
-  private load(categoryId: string, profileId: string): IHttpInstance {
+  private load(categoryId: string, scenarioId: string): IHttpInstance {
     const category = this.pathService.getCategory(categoryId);
-    const profile = this.pathService.getProfile(categoryId, profileId);
+    const scenario = this.pathService.getScenario(categoryId, scenarioId);
     let websocket: IWebsocketMain;
     let api: IApiMain;
-    if (profile.websocket.active) {
-      websocket = this.pathService.getService<IWebsocketMain>(categoryId, profileId, 'websocket');
+    if (scenario.websocket.active) {
+      websocket = this.pathService.getService<IWebsocketMain>(categoryId, scenarioId, 'websocket');
     }
 
-    if (profile.api.active) {
-      api = this.pathService.getService<IApiMain>(categoryId, profileId, 'api');
+    if (scenario.api.active) {
+      api = this.pathService.getService<IApiMain>(categoryId, scenarioId, 'api');
     }
 
     return {
       running: false,
-      main: { api, profile, websocket, category }
+      main: { api, scenario, websocket, category }
     }
   }
 
-  start(categoryId: string, profileId: string, socketServer: io.Server) {
+  start(categoryId: string, scenarioId: string, socketServer: io.Server) {
     if (this.instances[categoryId] && this.instances[categoryId].running) {
       console.log('stopping already started server');
       this.stop(categoryId);
       delete this.instances[categoryId];
     }
 
-    const config = this.load(categoryId, profileId);
+    const config = this.load(categoryId, scenarioId);
 
     if (config.main.api) {
       config.server = new HttpManagerService(
         config.main.api,
-        this.pathService.getServicePath(categoryId, profileId, 'api'),
+        this.pathService.getServicePath(categoryId, scenarioId, 'api'),
       );
     }
 
     if (config.main.websocket) {
       config.socket = new WebsocketManagerService(
         config.main.websocket,
-        this.pathService.getServicePath(categoryId, profileId, 'websocket'),
+        this.pathService.getServicePath(categoryId, scenarioId, 'websocket'),
         socketServer,
       );
     }

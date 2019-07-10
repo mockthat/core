@@ -1,4 +1,4 @@
-import { IProfileMain } from './main/profile-main.interface';
+import { IScenarioMain } from './main/scenario-main.interface';
 import { IApiMain, IWebsocketMain } from './main/service-main.interface';
 import { HttpManagerService } from '../../services/http-manager.service';
 import { WebsocketManagerService } from '../../services/websocket-manager.service';
@@ -11,7 +11,7 @@ export interface IHttpInstances {
 export interface IHttpInstance {
   running: boolean;
   main: {
-    profile: IProfileMain;
+    scenario: IScenarioMain;
     category: ICategoryMain;
     api?: IApiMain;
     websocket?: IWebsocketMain;

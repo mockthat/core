@@ -24,14 +24,14 @@ You can check some demo structure at [./examples](https://github.com/mockthat/co
 
 Create a `./mocks` folder into the root of your project. You have the following entities:
 - **Category**: is a main wrapper of module tests, you can have only one category running at time
-- **Profile**: is the current state of the mock - there you can define `api` and `websockets`
+- **Scenarios**: is the current state of the mock - there you can define `api` and `websockets`
 
 ### Category
 Every folder inside `./mocks` will be considered a different "category" for mocking - you can only run one mock category at time
 
 1. Create a sub-folder into your `./mocks` folder.
 1. Inside that folder you must create:
-    - `./profile` folder - where it you will have the profiles for each mock state
+    - `./scenarios` folder - where it you will have the scenarios for each mock state
     - `main.json` file - where you will have this category name
 
 ```
@@ -40,15 +40,15 @@ Every folder inside `./mocks` will be considered a different "category" for mock
 }
 ```
 
-### Profile
+### Scenarios
 
-On profile is where you define what your mock will be using (`api` or/and `websocket`) and it's under a category, for example `./category-a/profile/<my-profile>`
+On scenario is where you define what your mock will be using (`api` or/and `websocket`) and it's under a category, for example `./category-a/scenarios/<my-scenario>`
 
-A simple example of profile configutarion:
+A simple example of scenario configutarion:
 
 ```
 {
-  "name": "Profile name",
+  "name": "Scenario name",
   "api": {
     "active": true,
     "config": "./api/main.json"

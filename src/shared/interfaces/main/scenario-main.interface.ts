@@ -1,6 +1,6 @@
 import { IServiceShortMain } from './service-main.interface';
 
-export interface IProfileMain {
+export interface IScenarioMain {
   name: string,
   api: IServiceShortMain,
   websocket: IServiceShortMain,

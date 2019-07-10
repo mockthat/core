@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { IPathConfig } from '../shared/interfaces/path.interface';
-import { IProfileMain } from '../shared/interfaces/main/profile-main.interface';
+import { IScenarioMain } from '../shared/interfaces/main/scenario-main.interface';
 import { ICategoryMain } from '../shared/interfaces/main/category-main.interface';
 
 export class PathService {
@@ -11,7 +11,7 @@ export class PathService {
     return this.readMainJSON(this.config.root);
   }
 
-  getCategory(categoryId: string): IProfileMain {
+  getCategory(categoryId: string): IScenarioMain {
     const categoryPath = path.resolve(`${this.config.root}/${categoryId}/main.json`);
 
     if (!fs.existsSync(categoryPath)) {
@@ -21,47 +21,47 @@ export class PathService {
     return { ...JSON.parse(fs.readFileSync(categoryPath, 'utf-8')), id: categoryId };
   }
 
-  getProfiles(categoryId: string) {
-    const modulePath = path.resolve(`${this.config.root}/${categoryId}/profile`);
+  getScenarios(categoryId: string) {
+    const modulePath = path.resolve(`${this.config.root}/${categoryId}/scenarios`);
 
     if (!fs.existsSync(modulePath)) {
       throw new Error(`${modulePath} doesn't exist!`);
     }
 
 
-    return this.readMainJSON(modulePath, `${this.config.root}/${categoryId}/profile`);
+    return this.readMainJSON(modulePath, `${this.config.root}/${categoryId}/scenarios`);
   }
 
-  getProfile(categoryId: string, profileId: string): IProfileMain {
-    const profilePath = path.resolve(`${this.config.root}/${categoryId}/profile/${profileId}/main.json`);
+  getScenario(categoryId: string, scenarioId: string): IScenarioMain {
+    const scenarioPath = path.resolve(`${this.config.root}/${categoryId}/scenarios/${scenarioId}/main.json`);
 
-    if (!fs.existsSync(profilePath)) {
-      throw new Error(`${profilePath} doesn't exist!`);
+    if (!fs.existsSync(scenarioPath)) {
+      throw new Error(`${scenarioPath} doesn't exist!`);
     }
 
-    return { ...JSON.parse(fs.readFileSync(profilePath, 'utf-8')), id: profileId };
+    return { ...JSON.parse(fs.readFileSync(scenarioPath, 'utf-8')), id: scenarioId };
   }
 
-  getService<T>(categoryId: string, profileId: string, servicePath: 'api' | 'websocket'): T {
-    const profilePath = path.resolve(`${this.getServicePath(categoryId, profileId, servicePath)}/main.json`);
+  getService<T>(categoryId: string, scenarioId: string, servicePath: 'api' | 'websocket'): T {
+    const scenarioPath = path.resolve(`${this.getServicePath(categoryId, scenarioId, servicePath)}/main.json`);
 
-    if (!fs.existsSync(profilePath)) {
-      throw new Error(`${profilePath} doesn't exist!`);
+    if (!fs.existsSync(scenarioPath)) {
+      throw new Error(`${scenarioPath} doesn't exist!`);
     }
 
-    return JSON.parse(fs.readFileSync(profilePath, 'utf-8'));
+    return JSON.parse(fs.readFileSync(scenarioPath, 'utf-8'));
   }
 
-  getServicePath(categoryId: string, profileId: string, servicePath: 'api' | 'websocket') {
-    return path.resolve(`${this.config.root}/${categoryId}/profile/${profileId}/${servicePath}/`);
+  getServicePath(categoryId: string, scenarioId: string, servicePath: 'api' | 'websocket') {
+    return path.resolve(`${this.config.root}/${categoryId}/scenarios/${scenarioId}/${servicePath}/`);
   }
 
   readMainJSON(initialPath: string, mainPathPrefix: string = initialPath): any {
     return fs.readdirSync(initialPath)
       // tranform to full path
-      .map(profileFolder => ({
-        path: path.resolve(`${mainPathPrefix}/${profileFolder}/main.json`),
-        id: profileFolder,
+      .map(scenarioFolder => ({
+        path: path.resolve(`${mainPathPrefix}/${scenarioFolder}/main.json`),
+        id: scenarioFolder,
       }))
       .map(({ id, path }) => {
         if (!fs.existsSync(path)) {
