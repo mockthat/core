@@ -58,7 +58,7 @@ export class HttpManagerService {
 
         res.statusCode = service.code || 200;
 
-        res.json(response);
+        res.json(JSON.parse(response));
       });
     });
   }

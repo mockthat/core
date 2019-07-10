@@ -1,0 +1,20 @@
+# compiled output
+/tmp
+**/tmp
+/out-tsc
+__diff__
+
+# dependencies
+/node_modules
+**/node_modules
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+.angulardoc.json
