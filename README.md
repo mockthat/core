@@ -65,6 +65,9 @@ A simple example of scenario configutarion:
 ```
 
 #### API
+
+You can check all fields type on https://github.com/mockthat/core/blob/master/src/shared/interfaces/main/service-main.interface.ts
+
 Here you can define what port your API will be running, response code, what will reply, method and others.
 
 Example of api JSON:
@@ -89,6 +92,8 @@ Example of api JSON:
 Please not that all paths are relative from where this JSON is located.
 
 #### Websocket
+You can check all fields type on https://github.com/mockthat/core/blob/master/src/shared/interfaces/main/service-main.interface.ts
+
 Here you can define the repetition strategy, when it will be trigged and what messages you will be sending.
 
 Example of Websocket JSON:
