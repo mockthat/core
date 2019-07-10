@@ -6,12 +6,14 @@ Mockserver can be installed globally if you need
 to run it as a command:
 
 ```
-$ npm install -g @mockthat/core
+$ npm install -g @mockthat/web
 
 $ mockthat --path ./custom-folder --port 8080
 Mock that! is currently runnig at http://localhost:8080/
 Serving Files: <your-project-path>/custom-folder
 ```
+
+> **Note**: You can install `@mockthat/core` if you want a version without the web browser, if you use `@mockthat/web` will be using the web from [@mockthat/web](https://github.com/mockthat/web)
 
 ### Options
 
