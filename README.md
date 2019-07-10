@@ -1,4 +1,8 @@
 # Mock that!
+Core: [![npm version](https://badge.fury.io/js/%40mockthat%2Fcore.svg)](https://badge.fury.io/js/%40mockthat%2Fcore)
+
+Web: [![npm version](https://badge.fury.io/js/%40mockthat%2Fweb.svg)](https://badge.fury.io/js/%40mockthat%2Fweb)
+
 
 ## Installation
 
