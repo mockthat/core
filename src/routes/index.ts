@@ -13,7 +13,18 @@ export const setRoutes = (app: express.Express, server: http.Server, path: strin
   app.get('/available-mocks', ({}, res) => {
     const mocks = pathService.getMocks().map(item => ({
       ...item,
-      scenarios: pathService.getScenarios(item.id),
+      scenarios: pathService.getScenarios(item.id).map(scenario => {
+        let running = false;
+        if (serviceManager.instances[item.id] && serviceManager.instances[item.id].main.scenario.id === scenario.id) {
+          running = serviceManager.instances[item.id].running;
+        }
+
+        return {
+          ...scenario,
+          running,
+        }
+      }),
+      running: serviceManager.instances[item.id] ? serviceManager.instances[item.id].running : false,
     }));
 
     res.json(mocks);

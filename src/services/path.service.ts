@@ -21,7 +21,7 @@ export class PathService {
     return { ...JSON.parse(fs.readFileSync(categoryPath, 'utf-8')), id: categoryId };
   }
 
-  getScenarios(categoryId: string) {
+  getScenarios(categoryId: string): IScenarioMain[] {
     const modulePath = path.resolve(`${this.config.root}/${categoryId}/scenarios`);
 
     if (!fs.existsSync(modulePath)) {
