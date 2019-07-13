@@ -23,6 +23,7 @@ export class WebsocketManagerService {
       case 'ON_CONNECTION':
         io.on('connection', socket => {
           console.log('\tClient connected!');
+          this.active = true;
           this.startLooping(0, socket);
 
           socket.on('disconnect', () => {

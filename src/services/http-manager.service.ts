@@ -64,7 +64,7 @@ export class HttpManagerService {
 
         res.statusCode = service.code || 200;
 
-        res.json(JSON.parse(response));
+        setTimeout(() => res.json(JSON.parse(response)), service.delay || 0);
       });
     });
   }

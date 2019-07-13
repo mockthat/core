@@ -7,6 +7,7 @@ export interface IService {
   method: 'POST' | 'PUT' | 'GET' | 'DELETE',
   path: string,
   code: number,
+  delay?: number,
   header: any
 }
 
