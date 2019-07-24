@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import { IApiMain } from '../shared/interfaces/main/service-main.interface';
+import { datify } from "../utils/datify";
 
 let servers: {
   [port: string]: {
@@ -52,6 +53,10 @@ export class HttpManagerService {
 
       if (service.path) {
         response = fs.readFileSync(path.resolve(`${this.path}/${service.path}`), 'utf-8');
+      }
+
+      if (service.path && service.datify) {
+        response = datify(response);
       }
 
       console.log(`\tAdding route [${service.method}] ${service.api}`);
