@@ -8,6 +8,7 @@ export interface IService {
   path: string,
   code: number,
   delay?: number,
+  datify?: boolean,
   header: any
 }
 

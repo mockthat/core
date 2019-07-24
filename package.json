@@ -14,22 +14,28 @@
     "start:watch": "nodemon",
     "prepublish": "tsc",
     "tsc": "tsc",
-    "build": "npm run build"
+    "build": "npm run build",
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "momentjs": "^2.0.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
+    "@types/jest": "^24.0.15",
     "@types/node": "^12.6.1",
     "@types/socket.io": "^2.1.2",
     "@types/ws": "^6.0.1",
     "eslint": "^6.0.1",
     "eslint-plugin-import": "^2.18.0",
+    "jest": "^24.8.0",
     "minimist": "^1.2.0",
     "nodemon": "^1.19.1",
     "open": "^6.4.0",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   },
