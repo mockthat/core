@@ -42,4 +42,25 @@ describe('Datify', () => {
 
     expect(datify(input)).toBe(output);
   });
+
+  it('should create current data in place of few same patterns', () => {
+    const input = `{date:'{{DATE(NOW)}}', something: true, date2:'{{DATE(NOW)}}'}`;
+    const output = `{date:'${moment().format()}', something: true, date2:'${moment().format()}'}`;
+
+    expect(datify(input)).toBe(output);
+  });
+
+  it('should create current data in place of two different patterns', () => {
+    const input = `{date:'{{DATE(NOW)}}', something: true, date2:'{{DATE(NOW, -100000)}}'}`;
+    const output = `{date:'${moment().format()}', something: true, date2:'${moment().add(-100000, 'ms').format()}'}`;
+
+    expect(datify(input)).toBe(output);
+  });
+
+  it('should create current data in place of few different patterns', () => {
+    const input = `{date:'{{DATE(NOW)}}', something: true, date2:'{{DATE(NOW, -100000)}}', date3:'{{DATE(NOW, -100000, 'YYYY-M-DD')}}'}`;
+    const output = `{date:'${moment().format()}', something: true, date2:'${moment().add(-100000, 'ms').format()}', date3:'${moment().add(-100000, 'ms').format('YYYY-M-DD')}'}`;
+
+    expect(datify(input)).toBe(output);
+  });
 });

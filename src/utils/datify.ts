@@ -13,10 +13,14 @@
 
 import * as moment from 'moment';
 
+function escapeRegExp(string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export function datify(source, outputFormat = null) {
   const dateBindings = source.match(/{{DATE\((.*?)\)}}/g);
   const nowSource = moment();
-  let output;
+  let output = source;
 
   dateBindings.forEach(binding => {
     let now = nowSource.clone();
@@ -27,17 +31,17 @@ export function datify(source, outputFormat = null) {
         case 0:
         case 1:
           if (args.length === 0 || args[0] === 'NOW') {
-            output = source.replace(binding, formatDate(now, outputFormat));
+            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(now, outputFormat));
           } else {
-            output = source.replace(binding, formatDate(moment(args[0]), outputFormat));
+            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(moment(args[0]), outputFormat));
           }
           break;
         case 2:
         case 3:
           if (args[0] === 'NOW') {
-            output = source.replace(binding, formatDate(now.add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
+            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(now.add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
           } else {
-            output = source.replace(binding, formatDate(moment(args[0]).add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
+            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(moment(args[0]).add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
           }
 
           break;
