@@ -22,34 +22,36 @@ export function datify(source, outputFormat = null) {
   const nowSource = moment();
   let output = source;
 
-  dateBindings.forEach(binding => {
-    let now = nowSource.clone();
-    const args = binding.replace(/({{DATE\()?(\)}})?/g, '').split(',');
+  if (dateBindings) {
+    dateBindings.forEach(binding => {
+      let now = nowSource.clone();
+      const args = binding.replace(/({{DATE\()?(\)}})?/g, '').split(',');
 
-    try {
-      switch (args.length) {
-        case 0:
-        case 1:
-          if (args.length === 0 || args[0] === 'NOW') {
-            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(now, outputFormat));
-          } else {
-            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(moment(args[0]), outputFormat));
-          }
-          break;
-        case 2:
-        case 3:
-          if (args[0] === 'NOW') {
-            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(now.add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
-          } else {
-            output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(moment(args[0]).add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
-          }
+      try {
+        switch (args.length) {
+          case 0:
+          case 1:
+            if (args.length === 0 || args[0] === 'NOW') {
+              output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(now, outputFormat));
+            } else {
+              output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(moment(args[0]), outputFormat));
+            }
+            break;
+          case 2:
+          case 3:
+            if (args[0] === 'NOW') {
+              output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(now.add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
+            } else {
+              output = output.replace(new RegExp(escapeRegExp(binding), "g"), formatDate(moment(args[0]).add(parseInt(args[1], 10), 'ms'), outputFormat, args[2]));
+            }
 
-          break;
+            break;
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch(e) {
-      console.log(e);
-    }
-  });
+    });
+  }
 
   return output;
 }
