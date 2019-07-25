@@ -27,5 +27,7 @@ export interface IWebsocketMain {
   messages: IMessage[],
   trigger: 'ON_CONNECTION' | 'IMMEDIATELY';
   repeat: boolean;
+  datify?: boolean;
+  asString?: boolean;
 }
 

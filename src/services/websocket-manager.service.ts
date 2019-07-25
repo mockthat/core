@@ -2,6 +2,7 @@ import { IWebsocketMain } from '../shared/interfaces/main/service-main.interface
 import * as path from 'path';
 import * as fs from 'fs';
 import * as io from 'socket.io';
+import { datify } from "../utils/datify";
 
 export class WebsocketManagerService {
   active = true;
@@ -46,7 +47,11 @@ export class WebsocketManagerService {
       return;
     }
 
-    const content = fs.readFileSync(path.resolve(`${this.path}/${message.path}`), 'utf-8');
+    let content = fs.readFileSync(path.resolve(`${this.path}/${message.path}`), 'utf-8');
+
+    if (this.config.datify) {
+      content = datify(content);
+    }
 
     const nextIndex = messageIndex + 1;
 
@@ -57,7 +62,7 @@ export class WebsocketManagerService {
 
       this.startLooping(nextIndex, io);
       console.log(`Emiting ${message.event}`);
-      io.emit(message.event, JSON.parse(content));
+      io.emit(message.event, this.config.asString ? content : JSON.parse(content));
     }, message.delay || 0);
   }
 
