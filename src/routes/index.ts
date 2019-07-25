@@ -48,12 +48,12 @@ export const setRoutes = (app: express.Express, server: http.Server, path: strin
     res.json(instances);
   });
 
-  app.get('/mock/:categoryId/:scenarioId/start', (req, res) => {
+  app.post('/mock/:categoryId/:scenarioId/start', (req, res) => {
     const instances = serviceManager.start(req.params.categoryId, req.params.scenarioId, wss);
     res.json(instances);
   });
 
-  app.get('/mock/:categoryId/:scenarioId/stop', (req, res) => {
+  app.post('/mock/:categoryId/:scenarioId/stop', (req, res) => {
     serviceManager.stop(req.params.categoryId);
     res.json({
       action: 'stop',
