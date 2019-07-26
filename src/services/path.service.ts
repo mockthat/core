@@ -7,6 +7,10 @@ import { ICategoryMain } from '../shared/interfaces/main/category-main.interface
 export class PathService {
   constructor(private config: IPathConfig) { }
 
+  getRootPath() {
+    return this.config.root;
+  }
+
   getMocks(): ICategoryMain[] {
     return this.readMainJSON(this.config.root);
   }

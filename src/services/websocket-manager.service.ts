@@ -6,9 +6,11 @@ import { datify } from "../utils/datify";
 
 export class WebsocketManagerService {
   active = true;
+  io: io.Server;
 
   constructor(private config: IWebsocketMain, private path: string, io: io.Server) {
     this.init(io);
+    this.io = io;
 
     io.on('disconnection', (connection) => {
       console.log('\tClient connected!');
