@@ -4,11 +4,25 @@ import { IWebsocketMain, IApiMain } from "../shared/interfaces/main/service-main
 import { HttpManagerService } from "./http-manager.service";
 import { WebsocketManagerService } from "./websocket-manager.service";
 import * as io from 'socket.io';
+import * as path from "path";
+import watch from "node-watch";
 
 export class ServiceManagerService {
   instances: IHttpInstances = {};
 
-  constructor(private pathService: PathService) {}
+  constructor(private pathService: PathService) {
+    watch(path.resolve(`${this.pathService.getRootPath()}`), { recursive: true }, () => {
+      console.log(`Files changed - let's rebuild your endpoints!`);
+
+      for (const instance in this.instances) {
+        this.start(
+          this.instances[instance].main.category.id,
+          this.instances[instance].main.scenario.id,
+          this.instances[instance].socket ? this.instances[instance].socket.io : null
+        );
+      }
+    });
+  }
 
   private load(categoryId: string, scenarioId: string): IHttpInstance {
     const category = this.pathService.getCategory(categoryId);
