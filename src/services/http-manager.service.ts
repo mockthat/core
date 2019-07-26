@@ -101,7 +101,15 @@ export class HttpManagerService {
 
         res.statusCode = service.code || 200;
 
-        setTimeout(() => res.json(JSON.parse(response)), service.delay || 0);
+        let jsonResponse;
+
+        try {
+          jsonResponse = JSON.parse(response);
+        } catch(e) {
+          jsonResponse = 'Error in response template';
+        }
+
+        setTimeout(() => res.json(jsonResponse), service.delay || 0);
       });
     });
   }
