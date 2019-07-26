@@ -9,7 +9,8 @@ export interface IService {
   code: number,
   delay?: number,
   datify?: boolean,
-  header: any
+  header: any,
+  mustache?: boolean
 }
 
 export interface IMessage {

@@ -2,7 +2,8 @@ import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import { IApiMain } from '../shared/interfaces/main/service-main.interface';
-import { datify } from "../utils/datify";
+import { datify } from '../utils/datify';
+import * as Mustache from 'mustache'
 
 let servers: {
   [port: string]: {
@@ -51,8 +52,39 @@ export class HttpManagerService {
     this.config.services.forEach(service => {
       let response: any;
 
-      if (service.path) {
-        response = fs.readFileSync(path.resolve(`${this.path}/${service.path}`), 'utf-8');
+      if (service.mustache) {
+        let partials = {};
+        let scenario;
+
+        try {
+          scenario = JSON.parse(fs.readFileSync(path.resolve(`${this.path}/${service.path}`), 'utf-8'));
+        } catch (e) {
+          response = 'Error in scenario definition';
+        }
+
+        if (scenario) {
+          const template = fs.readFileSync(path.resolve(`${this.path}/../../../templates/${scenario.template}.mustache`), 'utf-8');
+          const partialsKeys = template.match(/{{>(.*?)}}/g).map(partial => partial.replace(/({{>)?(}})?/g, ''));
+
+          if (partialsKeys) {
+            partialsKeys.forEach(
+              partial =>
+                partials[partial] = fs.readFileSync(path.resolve(`${this.path}/../../../templates/${partial}.mustache`), 'utf-8')
+            )
+          }
+
+          response = Mustache.render(template, scenario.data, partials);
+
+          try {
+            response = JSON.stringify(JSON.parse(response));
+          } catch (e) {
+            response = 'Error in response template';
+          }
+        }
+      } else {
+        if (service.path) {
+          response = fs.readFileSync(path.resolve(`${this.path}/${service.path}`), 'utf-8');
+        }
       }
 
       if (service.path && service.datify) {
