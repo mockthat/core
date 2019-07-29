@@ -18,14 +18,14 @@ function escapeRegExp(string): string {
 }
 
 export function datify(source, outputFormat = null) {
-  const dateBindings = source.match(/{{DATE\((.*?)\)}}/g);
+  const dateBindings = source.match(/@@DATE\((.*?)\)@@/g);
   const nowSource = moment();
   let output = source;
 
   if (dateBindings) {
     dateBindings.forEach(binding => {
       let now = nowSource.clone();
-      const args = binding.replace(/({{DATE\()?(\)}})?/g, '').split(',');
+      const args = binding.replace(/(@@DATE\()?(\)@@)?/g, '').split(',');
 
       try {
         switch (args.length) {

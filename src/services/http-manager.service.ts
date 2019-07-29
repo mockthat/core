@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { IApiMain } from '../shared/interfaces/main/service-main.interface';
 import { datify } from '../utils/datify';
-import * as Mustache from 'mustache'
+import { getMustacheResponse } from "../utils/mustache";
 
 let servers: {
   [port: string]: {
@@ -53,34 +53,7 @@ export class HttpManagerService {
       let response: any;
 
       if (service.mustache) {
-        let partials = {};
-        let scenario;
-
-        try {
-          scenario = JSON.parse(fs.readFileSync(path.resolve(`${this.path}/${service.path}`), 'utf-8'));
-        } catch (e) {
-          response = 'Error in scenario definition';
-        }
-
-        if (scenario) {
-          const template = fs.readFileSync(path.resolve(`${this.path}/../../../templates/${scenario.template}.mustache`), 'utf-8');
-          const partialsKeys = template.match(/{{>(.*?)}}/g).map(partial => partial.replace(/({{>)?(}})?/g, ''));
-
-          if (partialsKeys) {
-            partialsKeys.forEach(
-              partial =>
-                partials[partial] = fs.readFileSync(path.resolve(`${this.path}/../../../templates/${partial}.mustache`), 'utf-8')
-            )
-          }
-
-          response = Mustache.render(template, scenario.data, partials);
-
-          try {
-            response = JSON.stringify(JSON.parse(response));
-          } catch (e) {
-            response = 'Error in response template';
-          }
-        }
+        response = getMustacheResponse(this.path, service);
       } else {
         if (service.path) {
           response = fs.readFileSync(path.resolve(`${this.path}/${service.path}`), 'utf-8');
@@ -94,22 +67,19 @@ export class HttpManagerService {
       console.log(`\tAdding route [${service.method}] ${service.api}`);
 
       app[service.method.toLocaleLowerCase()](service.api, ({}, res: express.Response) => {
-
         if (service.header) {
           Object.keys(service.header).forEach((v: string) => res.setHeader(v, service.header[v]));
         }
 
         res.statusCode = service.code || 200;
 
-        let jsonResponse;
-
-        try {
-          jsonResponse = JSON.parse(response);
-        } catch(e) {
-          jsonResponse = 'Error in response template';
-        }
-
-        setTimeout(() => res.json(jsonResponse), service.delay || 0);
+        setTimeout(() => {
+          try {
+            res.json(JSON.parse(response));
+          } catch(e) {
+            console.log(e);
+          }
+        }, service.delay || 0);
       });
     });
   }

@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as io from 'socket.io';
 import { datify } from "../utils/datify";
+import { getMustacheResponse } from "../utils/mustache";
 
 export class WebsocketManagerService {
   active = true;
@@ -40,6 +41,7 @@ export class WebsocketManagerService {
 
   startLooping(messageIndex: number, io: io.Socket | io.Server) {
     const message = this.config.messages[messageIndex];
+    let content;
 
     if (!message && this.config.repeat && this.active) {
       this.startLooping(0, io);
@@ -49,7 +51,13 @@ export class WebsocketManagerService {
       return;
     }
 
-    let content = fs.readFileSync(path.resolve(`${this.path}/${message.path}`), 'utf-8');
+    if (this.config.mustache) {
+      content = getMustacheResponse(this.path, message);
+    } else {
+      if (message.path) {
+        content = fs.readFileSync(path.resolve(`${this.path}/${message.path}`), 'utf-8');
+      }
+    }
 
     if (this.config.datify) {
       content = datify(content);
