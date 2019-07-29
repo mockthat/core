@@ -45,7 +45,6 @@ export class ServiceManagerService {
 
   start(categoryId: string, scenarioId: string, socketServer: io.Server) {
     if (this.instances[categoryId] && this.instances[categoryId].running) {
-      console.log('stopping already started server');
       this.stop(categoryId);
       delete this.instances[categoryId];
     }
@@ -86,10 +85,12 @@ export class ServiceManagerService {
     }
 
     if (config.server) {
+      console.log('Stopping already started server');
       config.server.stop();
     }
 
     if (config.socket) {
+      console.log('Stopping already started websocket');
       config.socket.stop();
     }
 
