@@ -30,5 +30,6 @@ export interface IWebsocketMain {
   repeat: boolean;
   datify?: boolean;
   asString?: boolean;
+  mustache?: boolean;
 }
 
