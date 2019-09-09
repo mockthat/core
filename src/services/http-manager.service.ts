@@ -46,6 +46,10 @@ export class HttpManagerService {
     this.initializeRoute();
   }
 
+  static registerServer(port: string, express: express.Express, server: any) {
+    servers[port] = { express, server };
+  }
+
   private initializeRoute() {
     const app = this.express;
 
