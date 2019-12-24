@@ -25,6 +25,24 @@ export class PathService {
     return { ...JSON.parse(fs.readFileSync(categoryPath, 'utf-8')), id: categoryId };
   }
 
+  getSets(): any[] {
+    return fs.readdirSync(path.resolve(this.config.setsRoot))
+      .map((set) => {
+        try {
+          return {
+            filename: set.replace('.json', ''),
+            name: JSON.parse(fs.readFileSync(path.resolve(`${this.config.setsRoot}/${set}`), 'utf-8')).name,
+          };
+        } catch (e) {
+          throw new Error(`Error in set directory`);
+        }
+      })
+  }
+
+  getScenariosFromSet(set: string) {
+    return JSON.parse(fs.readFileSync(path.resolve(`${this.config.setsRoot}/${set}.json`), 'utf-8'));
+  }
+
   getScenarios(categoryId: string): IScenarioMain[] {
     const modulePath = path.resolve(`${this.config.root}/${categoryId}/scenarios`);
 

@@ -43,6 +43,15 @@ export class ServiceManagerService {
     }
   }
 
+  stopAll() {
+    Object.keys(this.instances).forEach(instance => {
+      if (this.instances[instance].running) {
+        this.stop(instance);
+      }
+      delete this.instances[instance];
+    })
+  }
+
   start(categoryId: string, scenarioId: string, socketServer: io.Server) {
     if (this.instances[categoryId] && this.instances[categoryId].running) {
       this.stop(categoryId);
