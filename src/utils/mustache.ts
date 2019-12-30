@@ -16,15 +16,7 @@ export function getMustacheResponse(destinationPath, service) {
 
   if (scenario) {
     const template = fs.readFileSync(path.resolve(`${destinationPath}/../../../templates/${scenario.template}.mustache`), 'utf-8');
-    const partialsKeys = (template.match(/{{>(.*?)}}/g) || []).map(partial => partial.replace(/({{>)?(}})?/g, ''));
-
-    if (partialsKeys) {
-      partialsKeys.forEach(
-        partial =>
-          partials[partial] = fs.readFileSync(path.resolve(`${destinationPath}/../../../templates/${partial}.mustache`), 'utf-8')
-      )
-    }
-
+    partials = getMustachePartial(destinationPath, partials, scenario.template);
     response = Mustache.render(template, scenario.data, partials).replace(/,(?=\s*[}\]])/mig,'');
 
     try {
@@ -37,4 +29,22 @@ export function getMustacheResponse(destinationPath, service) {
   }
 
   return response;
+}
+
+function getMustachePartial(destinationPath, partials, templateName, partial = false) {
+  const template = fs.readFileSync(path.resolve(`${destinationPath}/../../../templates/${templateName}.mustache`), 'utf-8');
+  const partialsKeys = (template.match(/{{>(.*?)}}/g) || []).map(partial => partial.replace(/({{>)?(}})?/g, ''));
+
+  if (partial) {
+    partials[templateName] = template;
+  }
+
+  if (partialsKeys) {
+    partialsKeys.forEach(
+      partial =>
+        partials = getMustachePartial(destinationPath, partials, partial, true),
+    )
+  }
+
+  return partials;
 }

@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { IApiMain } from '../shared/interfaces/main/service-main.interface';
 import { datify } from '../utils/datify';
 import { getMustacheResponse } from "../utils/mustache";
+import { paramify } from "../utils/paramify";
 
 let servers: {
   [port: string]: {
@@ -70,16 +71,17 @@ export class HttpManagerService {
 
       console.log(`\tAdding route [${service.method}] ${service.api}`);
 
-      app[service.method.toLocaleLowerCase()](service.api, ({}, res: express.Response) => {
+      app[service.method.toLocaleLowerCase()](service.api, (req: express.Request, res: express.Response) => {
         if (service.header) {
           Object.keys(service.header).forEach((v: string) => res.setHeader(v, service.header[v]));
         }
 
         res.statusCode = service.code || 200;
+        const newResponse = paramify(response, req.params);
 
         setTimeout(() => {
           try {
-            res.json(JSON.parse(response));
+            res.json(JSON.parse(newResponse));
           } catch(e) {
             console.log(e);
           }

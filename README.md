@@ -26,14 +26,14 @@ Serving Files: <your-project-path>/custom-folder
 
 You can check some demo structure at [./examples](https://github.com/mockthat/core/tree/master/examples)
 
-Create a `./mocks` folder into the root of your project. You have the following entities:
+Create a `./mock` folder into the root of your project. You have the following entities:
 - **Category**: is a main wrapper of module tests, you can have only one category running at time
 - **Scenarios**: is the current state of the mock - there you can define `api` and `websockets`
 
 ### Category
-Every folder inside `./mocks` will be considered a different "category" for mocking - you can only run one mock category at time
+Every folder inside `./mock` will be considered a different "category" for mocking - you can only run one mock category at time
 
-1. Create a sub-folder into your `./mocks` folder.
+1. Create a sub-folder into your `./mock` folder.
 1. Inside that folder you must create:
     - `./scenarios` folder - where it you will have the scenarios for each mock state
     - `main.json` file - where you will have this category name
