@@ -12,12 +12,12 @@ function escapeRegExp(string): string {
 }
 
 export function paramify(source, params) {
-  const paramBindings = source.match(/@@PARAM\((.*?)\)@@/g);
+  const paramBindings = source.match(/@@PARAM\((.*?)\)@@|\"@@PARAM\((.*?)\)@@\"/g);
   let output = source;
 
   if (paramBindings) {
     paramBindings.forEach(binding => {
-      const param = binding.replace(/(@@PARAM\()?(\)@@)?/g, '');
+      const param = binding.replace(/(\"@@PARAM\()?(\)@@\")?|(@@PARAM\()?(\)@@)?/g, '');
 
       try {
         if (param) {
